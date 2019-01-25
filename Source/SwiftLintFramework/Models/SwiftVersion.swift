@@ -23,11 +23,14 @@ public extension SwiftVersion {
     static let four = SwiftVersion(rawValue: "4.0.0")
     static let fourDotOne = SwiftVersion(rawValue: "4.1.0")
     static let fourDotTwo = SwiftVersion(rawValue: "4.2.0")
+    static let five = SwiftVersion(rawValue: "5.0.0")
 
     static let current: SwiftVersion = {
         // Allow forcing the Swift version, useful in cases where SourceKit isn't available
         if let envVersion = ProcessInfo.processInfo.environment["SWIFTLINT_SWIFT_VERSION"] {
             switch envVersion {
+            case "5":
+                return .five
             case "4":
                 return .four
             default:
@@ -36,7 +39,9 @@ public extension SwiftVersion {
         }
 
         let file = File(contents: """
-            #if swift(>=4.2.0)
+            #if swift(>=5.0.0)
+                let version = "5.0.0"
+            #elseif swift(>=4.2.0)
                 let version = "4.2.0"
             #elseif swift(>=4.1.50)
                 let version = "4.1.50"
